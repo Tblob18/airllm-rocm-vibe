@@ -3,10 +3,11 @@
 [**Quickstart**](#quickstart) | 
 [**Configurations**](#configurations) | 
 [**MacOS**](#macos) | 
+[**AMD ROCm**](#amd-rocm-support) |
 [**Example notebooks**](#example-python-notebook) | 
 [**FAQ**](#faq)
 
-**AirLLM** optimizes inference memory usage, allowing 70B large language models to run inference on a single 4GB GPU card without quantization, distillation and pruning. And you can run **405B Llama3.1** on **8GB vram** now.
+**AirLLM** optimizes inference memory usage, allowing 70B large language models to run inference on a single 4GB GPU card without quantization, distillation and pruning. And you can run **405B Llama3.1** on **8GB vram** now. **Now supports AMD GPUs via ROCm!**
 
 <a href="https://github.com/lyogavin/airllm/stargazers">![GitHub Repo stars](https://img.shields.io/github/stars/lyogavin/airllm?style=social)</a>
 [![Downloads](https://static.pepy.tech/personalized-badge/airllm?period=total&units=international_system&left_color=grey&right_color=blue&left_text=downloads)](https://pepy.tech/project/airllm)
@@ -166,6 +167,53 @@ Just install airllm and run the code the same as on linux. See more in [Quick St
 * only [Apple silicon](https://support.apple.com/en-us/HT211814) is supported
 
 Example [python notebook] (https://github.com/lyogavin/airllm/blob/main/air_llm/examples/run_on_macos.ipynb)
+
+## AMD ROCm Support
+
+AirLLM now supports AMD GPUs through ROCm! Run large language models efficiently on AMD hardware.
+
+### Quick Setup
+
+1. **Install ROCm** (5.7+ recommended): Follow [AMD's installation guide](https://rocm.docs.amd.com/)
+
+2. **Install PyTorch with ROCm**:
+   ```bash
+   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7
+   ```
+
+3. **Install AirLLM**:
+   ```bash
+   pip install airllm
+   pip install -r requirements-rocm.txt
+   ```
+
+4. **Run inference** (same code works for both CUDA and ROCm):
+   ```python
+   from airllm import AutoModel
+   
+   model = AutoModel.from_pretrained("garage-bAInd/Platypus2-70B-instruct")
+   # Device detection is automatic!
+   ```
+
+### Supported AMD GPUs
+
+- AMD Radeon RX 6000/7000 series (RDNA 2/3)
+- AMD Instinct MI series (CDNA 2/3)
+- Other GCN 4.0+ architectures
+
+### ROCm Features
+
+✅ Automatic device detection (CUDA/ROCm/CPU)  
+✅ Memory-efficient layer sharding  
+✅ Same API as CUDA version  
+✅ Performance optimizations for AMD GPUs  
+✅ Comprehensive troubleshooting guide  
+
+### Documentation
+
+For detailed setup, troubleshooting, and benchmarking, see the [**ROCm Compatibility Guide**](ROCM_GUIDE.md).
+
+Example script: [rocm_inference_example.py](air_llm/examples/rocm_inference_example.py)
 
 
 ## Example Python Notebook

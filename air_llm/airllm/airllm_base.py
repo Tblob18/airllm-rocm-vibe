@@ -15,10 +15,16 @@ from transformers.quantizers import AutoHfQuantizer, HfQuantizer
 
 from .profiler import LayeredProfiler
 
-from optimum.bettertransformer import BetterTransformer
+try:
+    from optimum.bettertransformer import BetterTransformer
+    bettertransformer_available = True
+except ImportError:
+    bettertransformer_available = False
+    print('>>>> BetterTransformer not available, will use standard attention')
 
 from .utils import clean_memory, load_layer, \
     find_or_create_local_splitted_path
+from .device_utils import get_device, get_device_stream, get_device_type, print_device_info
 
 try:
     import bitsandbytes as bnb
@@ -111,8 +117,15 @@ class AirLLMBaseModel(GenerationMixin):
                                                                                          layer_names=self.layer_names_dict,
                                                                                          hf_token=hf_token,
                                                                                          delete_original=delete_original)
+        
+        # Print device information for debugging
+        device_type = get_device_type()
+        print(f">>> AirLLM initialized with device type: {device_type}")
+        if device_type in ['cuda', 'rocm']:
+            print_device_info()
+        
         self.running_device = device
-        self.device = torch.device(self.running_device)
+        self.device = get_device(self.running_device)
         self.running_dtype = dtype
         self.dtype = self.running_dtype
 
@@ -154,8 +167,9 @@ class AirLLMBaseModel(GenerationMixin):
             print(f"not support prefetching for compression for now. loading with no prepetching mode.")
 
         # this operation should run only if gpu is available
+        # Works for both CUDA and ROCm since ROCm uses CUDA API
         if prefetching and device.startswith("cuda"):
-            self.stream = torch.cuda.Stream()
+            self.stream = get_device_stream(self.device)
         else:
             self.stream = None
 
@@ -184,7 +198,7 @@ class AirLLMBaseModel(GenerationMixin):
         # Load meta model (no memory used)
         self.model = None
 
-        if self.get_use_better_transformer():
+        if self.get_use_better_transformer() and bettertransformer_available:
             try:
                 with init_empty_weights():
                     self.model = AutoModelForCausalLM.from_config(self.config, trust_remote_code=True)
