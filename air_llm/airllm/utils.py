@@ -23,6 +23,7 @@ import torch.nn as nn
 from safetensors.torch import load_file, save_file
 
 from .persist import ModelPersister
+from .device_utils import empty_cache as device_empty_cache
 
 
 try:
@@ -79,7 +80,7 @@ def clean_memory():
     except Exception as ex:
         # maybe platform
         pass
-    torch.cuda.empty_cache()
+    device_empty_cache()
 
 
 def uncompress_layer_state_dict(layer_state_dict):

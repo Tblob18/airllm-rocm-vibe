@@ -1,0 +1,40 @@
+# AirLLM Requirements for AMD ROCm
+# 
+# This file contains the dependencies needed to run AirLLM with AMD ROCm support.
+# 
+# Installation Instructions:
+# 1. First, install ROCm following AMD's official guide: https://rocm.docs.amd.com/
+# 2. Install PyTorch with ROCm support:
+#    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7
+# 3. Then install these requirements:
+#    pip install -r requirements-rocm.txt
+
+# Core dependencies (compatible versions)
+transformers @ git+https://github.com/huggingface/transformers.git
+peft>=0.7.0
+accelerate>=0.25.0
+einops==0.6.1
+evaluate==0.4.0
+scikit-learn==1.2.2
+sentencepiece==0.1.99
+wandb==0.15.3
+
+# ROCm-compatible compression library
+# NOTE: Standard bitsandbytes does NOT support ROCm. You have two options:
+# 
+# Option 1 (Recommended): Skip compression for now
+#   Simply don't install bitsandbytes and avoid using compression='4bit' or '8bit'
+#
+# Option 2: Use a ROCm-compatible fork (experimental)
+#   pip install git+https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6.git
+#
+# The line below is commented out as it won't work with ROCm:
+# bitsandbytes==0.39.0  # DOES NOT WORK WITH ROCM - See options above
+
+# Additional utilities
+safetensors>=0.3.0
+huggingface-hub>=0.16.0
+optimum>=1.12.0
+
+# Development dependencies (optional)
+pytest>=7.0.0  # For running tests
