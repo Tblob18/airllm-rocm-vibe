@@ -158,4 +158,4 @@ Users are encouraged to:
 - Share performance benchmarks
 - Contribute optimizations for specific GPU models
 
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for contribution guidelines.
+For contribution guidelines, please open an issue or submit a pull request on GitHub.

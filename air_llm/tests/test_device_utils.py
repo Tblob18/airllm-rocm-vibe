@@ -100,9 +100,9 @@ class TestROCmDetection(unittest.TestCase):
         cuda = is_cuda_available()
         
         # Both should not be True at the same time
-        if torch.cuda.is_available():
-            # Either ROCm or CUDA should be available, but not both
-            self.assertTrue(rocm ^ cuda or (not rocm and not cuda))
+        # They must be mutually exclusive
+        self.assertFalse(rocm and cuda, 
+                        "ROCm and CUDA cannot both be detected simultaneously")
     
     def test_device_type_consistency(self):
         """Test device type is consistent with availability checks"""

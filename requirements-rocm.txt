@@ -9,10 +9,10 @@
 # 3. Then install these requirements:
 #    pip install -r requirements-rocm.txt
 
-# Core dependencies (from requirements.txt)
+# Core dependencies (compatible versions)
 transformers @ git+https://github.com/huggingface/transformers.git
-peft @ git+https://github.com/huggingface/peft.git@v0.3.0
-accelerate @ git+https://github.com/huggingface/accelerate.git@v0.20.3
+peft>=0.7.0
+accelerate>=0.25.0
 einops==0.6.1
 evaluate==0.4.0
 scikit-learn==1.2.2
@@ -20,12 +20,16 @@ sentencepiece==0.1.99
 wandb==0.15.3
 
 # ROCm-compatible compression library
-# Note: For ROCm, you may need to build bitsandbytes from source or use a ROCm-compatible fork
-# Standard bitsandbytes may not work with ROCm. Consider alternatives:
-# - Build from source with ROCm support
-# - Use a community fork like: pip install git+https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6.git
-# For now, we include the standard version, but users should be aware of compatibility issues
-bitsandbytes==0.39.0  # May require ROCm-specific build
+# NOTE: Standard bitsandbytes does NOT support ROCm. You have two options:
+# 
+# Option 1 (Recommended): Skip compression for now
+#   Simply don't install bitsandbytes and avoid using compression='4bit' or '8bit'
+#
+# Option 2: Use a ROCm-compatible fork (experimental)
+#   pip install git+https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6.git
+#
+# The line below is commented out as it won't work with ROCm:
+# bitsandbytes==0.39.0  # DOES NOT WORK WITH ROCM - See options above
 
 # Additional utilities
 safetensors>=0.3.0

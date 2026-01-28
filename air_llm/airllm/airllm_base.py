@@ -117,12 +117,12 @@ class AirLLMBaseModel(GenerationMixin):
                                                                                          layer_names=self.layer_names_dict,
                                                                                          hf_token=hf_token,
                                                                                          delete_original=delete_original)
-        
-        # Print device information for debugging
-        device_type = get_device_type()
-        print(f">>> AirLLM initialized with device type: {device_type}")
-        if device_type in ['cuda', 'rocm']:
-            print_device_info()
+        # Print device information for debugging (when profiling mode is enabled)
+        if profiling_mode:
+            device_type = get_device_type()
+            print(f">>> AirLLM initialized with device type: {device_type}")
+            if device_type in ['cuda', 'rocm']:
+                print_device_info()
         
         self.running_device = device
         self.device = get_device(self.running_device)

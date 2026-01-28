@@ -50,8 +50,11 @@ Follow AMD's official ROCm installation guide for your operating system:
 **Ubuntu 22.04:**
 
 ```bash
-# Add ROCm repository
-wget https://repo.radeon.com/amdgpu-install/latest/ubuntu/jammy/amdgpu-install_5.7.50700-1_all.deb
+# Visit https://rocm.docs.amd.com/ for the latest installation instructions
+# The following is an example for ROCm 5.7 - check AMD's site for current version
+
+# Add ROCm repository (adjust version as needed)
+wget https://repo.radeon.com/amdgpu-install/5.7/ubuntu/jammy/amdgpu-install_5.7.50700-1_all.deb
 sudo apt install ./amdgpu-install_5.7.50700-1_all.deb
 
 # Install ROCm
@@ -89,8 +92,8 @@ python -c "import torch; print(f'ROCm available: {torch.cuda.is_available()}'); 
 pip install airllm
 
 # Or install from source for latest features
-git clone https://github.com/yourusername/airllm-rocm-vibe.git
-cd airllm-rocm-vibe
+git clone https://github.com/lyogavin/airllm.git
+cd airllm
 pip install -e ./air_llm
 ```
 
@@ -254,16 +257,16 @@ model = AutoModel.from_pretrained(
 
 ### Expected Performance
 
-Performance varies based on GPU model, VRAM, and model size:
+Performance varies based on GPU model, VRAM, and model size. The following are **rough estimates** based on typical configurations. Actual performance will vary significantly based on workload, model architecture, quantization, and system configuration.
 
-| GPU Model | VRAM | Model Size | Tokens/sec (approx) |
-|-----------|------|------------|---------------------|
-| RX 6600 XT | 8GB | Llama-2-7B | 15-20 |
-| RX 6800 XT | 16GB | Llama-2-13B | 12-18 |
-| RX 7900 XTX | 24GB | Llama-2-70B | 8-12 |
-| MI250 | 128GB | Llama-2-70B | 25-35 |
+| GPU Model | VRAM | Model Size | Estimated Range (tok/s) |
+|-----------|------|------------|-------------------------|
+| RX 6600 XT | 8GB | Llama-2-7B | 10-25 |
+| RX 6800 XT | 16GB | Llama-2-13B | 8-20 |
+| RX 7900 XTX | 24GB | Llama-2-70B | 5-15 |
+| MI250 | 128GB | Llama-2-70B | 20-40 |
 
-*Note: These are approximate values. Actual performance depends on configuration.*
+**Note**: These are rough estimates for reference only. Run the included benchmark script to measure actual performance on your hardware.
 
 ## Troubleshooting
 
@@ -470,7 +473,7 @@ When reporting ROCm-specific issues:
 
 ### Resources
 
-- **AirLLM Documentation**: [Main README](../README.md)
+- **AirLLM Documentation**: [Main README](README.md)
 - **ROCm Documentation**: https://rocm.docs.amd.com/
 - **PyTorch ROCm**: https://pytorch.org/get-started/locally/
 - **AMD GPU Community**: https://community.amd.com/
@@ -483,8 +486,6 @@ We welcome contributions to improve ROCm support:
 2. Performance optimizations
 3. Documentation improvements
 4. Bug reports and fixes
-
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines.
 
 ### Acknowledgements
 
